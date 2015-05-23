@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="lead">
+    The Room Name!
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <textarea class="col-md-10" rows="6" id="chat"></textarea>
+        <input class="col-md-1" type="button" id="speak" value="Speak It" />
+    </div>
+    <div class="col-md-10">
+        <div id="messages"></div>
+    </div>
+</div>
+
+@section scripts{
+    @System.Web.Optimization.Scripts.Render("~/Scripts/jquery.signalR-2.2.0.min.js")
+    <script src="~/signalr/hubs"></script>
+
+    <script type="text/javascript">
+
+        $("#speak").click(function () {
+            $.post('@Url.Action("Speak")', { words: $("#chat").val() }, function () { $("#chat").val(""); });
+        });
+
+        var chatHub = $.connection.chatHub;
+        chatHub.client.chatMessageReceived = function (words, whom, when) {
+            $("#messages").after("<blockquote><p>" + words + "</p><footer>" + whom + " " + when + "</footer></blockquote>");
+        };
+        $.connection.hub.start();
+    </script>
+}
