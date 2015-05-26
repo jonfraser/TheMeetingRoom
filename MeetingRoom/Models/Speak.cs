@@ -22,6 +22,8 @@ namespace MeetingRoom.Models
 		public string Words { get; set; }
 		public string Whom { get; set; }
 		public DateTime When { get; set; }
+
+		public Guid RoomPermalink { get; set; }
 	}
 
 	//public class SpeakActor : ReceiveActor
